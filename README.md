@@ -1,7 +1,5 @@
 # Getting Started
 
-Welcome to your new project.
-
 It contains these folders and files, following our recommended project layout:
 
 File or Folder | Purpose
@@ -10,16 +8,53 @@ File or Folder | Purpose
 `db/` | your domain models and data go here
 `srv/` | your service models and code go here
 `package.json` | project metadata and configuration
-`readme.md` | this getting started guide
 
 
-## Next Steps
+# Overview
+This document describes the OData services provided by the ProcessorService and AdminService in the CDS (Core Data Services) model. These services are used for managing incidents and customers in a support and administrative context.
 
-- Open a new terminal and run `cds watch`
-- (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
-- Start adding content, for example, a [db/schema.cds](db/schema.cds).
+# Services
 
+## ProcessorService
 
-## Learn More
+The ProcessorService is designed for support personnel, specifically the processors of incidents. It provides read-only access to incidents and customers.
 
-Learn more at https://cap.cloud.sap/docs/get-started/.
+- Entities:
+    - Incidents: A projection on the my.Incidents entity.
+    - Customers: A read-only projection on the my.Customers entity.
+
+- Annotations:
+    - `@odata.draft.enabled`: Enables draft handling for the Incidents entity.
+    - `@(requires: 'support')`: Restricts access to users with the 'support' role.
+
+### Example Usage
+- Get Incidents: `GET /ProcessorService/Incidents`
+- Get Customers: `GET /ProcessorService/Customers`
+
+### AdminService
+The AdminService is intended for administrators to manage both customers and incidents. It provides full access to these entities.
+
+- Entities:
+    - Customers: A projection on the my.Customers entity.
+    - Incidents: A projection on the my.Incidents entity.
+
+- Annotations:
+    - @(requires: 'admin'): Restricts access to users with the 'admin' role.
+
+### Example Usage
+- Get Customers: `GET /ProcessorService/Incidents`
+- Get Incidents: `GET /ProcessorService/Customers`
+
+# Security
+
+Access to the services is controlled via annotations:
+
+- ProcessorService requires the 'support' role.
+- AdminService requires the 'admin' role.
+
+# Draft Handling
+The ProcessorService.Incidents entity supports draft handling, allowing for the creation and modification of drafts before finalizing the data.
+
+# Frontend 
+![alt text](overview.png)
+![alt text](lineTable.png)
